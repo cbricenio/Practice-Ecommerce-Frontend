@@ -13,6 +13,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { authenticateUser } from "../API/UserAPI";
+import { useState } from "react";
+import { Alert } from "@mui/material";
+import { showToastMessage } from "../Components/Toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Copyright(props) {
   return (
@@ -36,18 +42,29 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-const Login = () => {
+const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    navigate("/home");
+    try {
+      const response = await authenticateUser(email, password);
+      if (response) {
+        console.log("from js", response.token);
+        localStorage.setItem("token", response.jwtToken);
+        console.log(localStorage.getItem("token"));
+        navigate("/landing");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("error");
+      showToastMessage("Invalid User");
+      navigate("/");
+    }
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -83,7 +100,7 @@ const Login = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Login
             </Typography>
             <Box
               component="form"
@@ -100,6 +117,8 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -110,6 +129,8 @@ const Login = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -121,7 +142,7 @@ const Login = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Login
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -140,6 +161,7 @@ const Login = () => {
           </Box>
         </Grid>
       </Grid>
+      <ToastContainer />
     </ThemeProvider>
   );
 };

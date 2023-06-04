@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { registerUser } from "../API/UserAPI";
 
 function Copyright(props) {
   return (
@@ -39,24 +39,10 @@ export default function Register() {
     firstName: "",
     lastName: "",
     email: "",
-    userName: "",
+    // userName: "",
     password: "",
-    confirmPassword: "",
+    // confirmPassword: "",
   });
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  const loadUser = async () => {
-    const result = await axios.get("/user/getAllUsers", {
-      auth: {
-        username: "admin",
-        password: "password",
-      },
-    });
-    console.log("get result", result);
-  };
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -68,20 +54,7 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    await axios
-      .post("/user/addUser", userDetails, {
-        auth: {
-          username: "user",
-          password: "password",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      });
-
-    console.log("userDetails", userDetails);
-
+    registerUser(userDetails);
     navigate("/");
   };
 
