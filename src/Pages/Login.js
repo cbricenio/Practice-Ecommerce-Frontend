@@ -55,7 +55,9 @@ const Login = (props) => {
         console.log("from js", response.token);
         localStorage.setItem("token", response.jwtToken);
         console.log(localStorage.getItem("token"));
-        navigate("/landing");
+
+        navigate("/admin/");
+
         window.location.reload();
       }
     } catch (error) {

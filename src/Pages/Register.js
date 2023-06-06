@@ -39,7 +39,7 @@ export default function Register() {
     firstName: "",
     lastName: "",
     email: "",
-    // userName: "",
+    role: "User",
     password: "",
     // confirmPassword: "",
   });

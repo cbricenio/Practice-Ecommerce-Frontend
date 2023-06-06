@@ -8,13 +8,12 @@ import { Button, Grid } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 
 const navigation = [
-  { name: "Home", href: "/admin" },
-  { name: "Add Product", href: "/admin/addProduct" },
-  { name: "Edit Product", href: "/admin/editProduct" },
-  { name: "Reports", href: "/admin/reports" },
+  { name: "Dashboard", href: "/user" },
+  { name: "Products", href: "/user/products" },
+  { name: "Cart", href: "/user/cart" },
 ];
 
-function Header() {
+function Navbar() {
   return (
     <>
       <Box>
@@ -26,9 +25,9 @@ function Header() {
                 <Grid
                   key={data.name}
                   item
-                  xs={3}
-                  sm={3}
-                  md={3}
+                  xs={4}
+                  sm={4}
+                  md={4}
                   sx={{ textAlign: "center" }}
                 >
                   {/* <Button sx={{ color: "#fff" }}> */}
@@ -53,4 +52,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Navbar;
