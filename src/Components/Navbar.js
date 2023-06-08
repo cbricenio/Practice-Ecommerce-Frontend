@@ -6,18 +6,21 @@ import Toolbar from "@mui/material/Toolbar";
 import { Route, Routes, Link } from "react-router-dom";
 import { Button, Grid } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
+import CartIcon from "@mui/icons-material/AddShoppingCartRounded";
+import HomeIcon from "@mui/icons-material/HomeOutlined";
+import ProductIcon from "@mui/icons-material/Inventory2Outlined";
 
 const navigation = [
-  { name: "Dashboard", href: "/user" },
-  { name: "Products", href: "/user/products" },
-  { name: "Cart", href: "/user/cart" },
+  { icon: <HomeIcon fontSize="large" />, href: "/user" },
+  { icon: <ProductIcon fontSize="large" />, href: "/user/products" },
+  { icon: <CartIcon fontSize="large" />, href: "/user/cart" },
 ];
 
 function Navbar() {
   return (
     <>
       <Box>
-        <AppBar>
+        <AppBar sx={{ backgroundColor: "transparent" }}>
           <Toolbar>
             {/* <Box> */}
             <Grid container>
@@ -34,9 +37,12 @@ function Navbar() {
                   <Link
                     key={data.name}
                     to={data.href}
-                    style={{ textDecoration: "none", color: "white" }}
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                    }}
                   >
-                    {data.name}
+                    {data.icon}
                   </Link>
                   {/* </Button> */}
                 </Grid>

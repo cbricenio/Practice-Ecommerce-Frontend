@@ -9,8 +9,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const navigation = [
   { name: "Home", href: "/admin" },
-  { name: "Add Product", href: "/admin/addProduct" },
-  { name: "Edit Product", href: "/admin/editProduct" },
   { name: "Reports", href: "/admin/reports" },
 ];
 
@@ -26,9 +24,9 @@ function Header() {
                 <Grid
                   key={data.name}
                   item
-                  xs={3}
-                  sm={3}
-                  md={3}
+                  xs={6}
+                  sm={6}
+                  md={6}
                   sx={{ textAlign: "center" }}
                 >
                   {/* <Button sx={{ color: "#fff" }}> */}

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const registerUser = async (data) => {
   try {
-    const response = await axios.post("/register", data);
+    const response = await axios.post("/auth/register", data);
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -11,27 +11,14 @@ export const registerUser = async (data) => {
   }
 };
 
-export const authenticateUser = async (email, password) => {
+export const authenticate = async (email, password) => {
   try {
     const data = {
       email: email,
       password: password,
     };
-    const response = await axios.post("/authenticate", data);
+    const response = await axios.post("/auth/authenticate", data);
     console.log("from api", response.data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const authenticateAdmin = async (email, password) => {
-  try {
-    const data = {
-      email: email,
-      password: password,
-    };
-    const response = await axios.post("/admin/authenticate", data);
     return response.data;
   } catch (error) {
     throw error;

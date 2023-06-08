@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { editProduct, getProductById } from "../../API/ProductAPI";
+import { Button } from "@mui/material";
 
 const EditProduct = () => {
+  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({
     id: "",
     productName: "",
     description: "",
+    category: "",
     price: "",
-    status: "",
+    quantity: 1,
   });
 
   const navigate = useNavigate();
@@ -16,10 +19,12 @@ const EditProduct = () => {
   const { id } = useParams();
   console.log(id);
 
-  const [msg, setMsg] = useState("");
-
   useEffect(() => {
-    // getProductById(id);
+    getProductById(id).then(function (result) {
+      console.log("result", result);
+      setProduct(result);
+      setQuantity(result.quantity);
+    });
     //   .getProductById(id)
     //   .then((res) => {
     //     setProduct(res.data);
@@ -28,7 +33,7 @@ const EditProduct = () => {
     //     console.log(error);
     //   });
   }, []);
-
+  console.log("prodd", product);
   const handleChange = (e) => {
     const value = e.target.value;
     setProduct({ ...product, [e.target.name]: value });
@@ -37,7 +42,8 @@ const EditProduct = () => {
   const ProductUpdate = (e) => {
     e.preventDefault();
 
-    // editProduct(product)
+    editProduct(id, product);
+    navigate("/admin/");
     //   .then((res) => {
     //     navigate("/");
     //   })
@@ -46,6 +52,16 @@ const EditProduct = () => {
     //   });
   };
 
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity((prevCount) => prevCount - 1);
+      setProduct({ ...product, ["quantity"]: quantity - 1 });
+    }
+  };
+  const handleIncrement = () => {
+    setQuantity((prevCount) => prevCount + 1);
+    setProduct({ ...product, ["quantity"]: quantity + 1 });
+  };
   return (
     <>
       <div className="container mt-3">
@@ -53,7 +69,6 @@ const EditProduct = () => {
           <div className="col-md-6 offset-md-3">
             <div className="card">
               <div className="card-header fs-3 text-center">Edit Product</div>
-              {msg && <p className="fs-4 text-center text-success">{msg}</p>}
 
               <div className="card-body">
                 <form onSubmit={(e) => ProductUpdate(e)}>
@@ -78,6 +93,26 @@ const EditProduct = () => {
                       value={product.description}
                     />
                   </div>
+
+                  <div className="mb-3">
+                    <label> Choose Category</label>
+                    <select
+                      id="category"
+                      name="category"
+                      className="form-control"
+                      onChange={(e) => handleChange(e)}
+                      value={product.category}
+                    >
+                      <option value="" disabled hidden>
+                        Choose here
+                      </option>
+                      <option value="Shoe">Shoe</option>
+                      <option value="Bag">Bag</option>
+                      <option value="Appliances">Appliances</option>
+                      <option value="Gadgets">Gadgets</option>
+                    </select>
+                  </div>
+
                   <div className="mb-3">
                     <label>Enter Price</label>
                     <input
@@ -90,14 +125,41 @@ const EditProduct = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label>Enter Status</label>
-                    <input
-                      type="text"
-                      name="status"
-                      className="form-control"
-                      onChange={(e) => handleChange(e)}
-                      value={product.status}
-                    />
+                    <label> Add Quantity</label>
+                    <div
+                      style={{
+                        marginTop: 10,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button
+                        sx={{ border: "1px solid gray", marginX: 2 }}
+                        onClick={handleDecrement}
+                      >
+                        -
+                      </Button>
+
+                      <input
+                        className="text-center "
+                        type="text"
+                        name="quantity"
+                        onChange={(e) => handleChange(e)}
+                        value={product.quantity}
+                        disabled
+                        style={{
+                          width: "30%",
+                          height: 38,
+                          border: "1px solid #EBEBE4",
+                        }}
+                      />
+                      <Button
+                        sx={{ border: "1px solid gray", marginX: 2 }}
+                        onClick={handleIncrement}
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
                   <button className="btn btn-primary col-md-12">Update</button>
                 </form>

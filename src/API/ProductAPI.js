@@ -4,7 +4,11 @@ import axios from "axios";
 
 export const saveProduct = async (data) => {
   try {
-    const response = await axios.post("/saveProduct", data);
+    const response = await axios.post("/admin/saveProduct", data, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -15,7 +19,12 @@ export const saveProduct = async (data) => {
 
 export const getAllProduct = async () => {
   try {
-    const response = await axios.get("/getAllProducts");
+    const response = await axios.get("/admin/getAllProducts", {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -26,7 +35,12 @@ export const getAllProduct = async () => {
 
 export const getProductById = async (id) => {
   try {
-    const response = await axios.get("/" + id);
+    const response = await axios.get("/admin/getProductById/" + id, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -37,7 +51,12 @@ export const getProductById = async (id) => {
 
 export const deleteProduct = async (id) => {
   try {
-    const response = await axios.delete("/deleteProduct/" + id);
+    const response = await axios.delete("/admin/deleteProduct/" + id, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
     console.log("Successfully deleted");
     window.location.reload();
     return response.data;
@@ -49,7 +68,11 @@ export const deleteProduct = async (id) => {
 
 export const editProduct = async (id, data) => {
   try {
-    const response = await axios.put("/editProduct/" + id, data);
+    const response = await axios.put("/admin/editProduct/" + id, data, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {

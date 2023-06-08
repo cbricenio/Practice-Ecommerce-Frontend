@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { saveProduct } from "../../API/ProductAPI";
 import ImageUploading from "react-images-uploading";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
+  const navigate = useNavigate();
   // upload image
   const [images, setImages] = React.useState([]);
   const maxNumber = 69;
@@ -52,7 +54,10 @@ const AddProduct = () => {
   const ProductRegister = (e) => {
     e.preventDefault();
     console.log("save", product);
-    saveProduct(product);
+    saveProduct(product)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+    navigate("/admin/");
     //   .then((res) => {
     //     console.log("Product Added Successfully");
     //     setMsg("Product Added Successfully");
@@ -111,10 +116,10 @@ const AddProduct = () => {
                       <option value="" disabled hidden>
                         Choose here
                       </option>
-                      <option value="volvo">Shoe</option>
-                      <option value="saab">Bag</option>
-                      <option value="fiat">Appliances</option>
-                      <option value="audi">Gadgets</option>
+                      <option value="Shoe">Shoe</option>
+                      <option value="Bag">Bag</option>
+                      <option value="Appliances">Appliances</option>
+                      <option value="Gadgets">Gadgets</option>
                     </select>
                   </div>
 
@@ -150,7 +155,7 @@ const AddProduct = () => {
                         type="text"
                         name="quantity"
                         onChange={(e) => handleChange(e)}
-                        value={quantity}
+                        value={product.quantity}
                         disabled
                         style={{
                           width: "30%",

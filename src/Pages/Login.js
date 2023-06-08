@@ -13,12 +13,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import { authenticateUser } from "../API/UserAPI";
+import { authenticate } from "../API/UserAPI";
 import { useState } from "react";
 import { Alert } from "@mui/material";
 import { showToastMessage } from "../Components/Toastify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import jwt from "jwt-decode";
 
 function Copyright(props) {
   return (
@@ -50,15 +51,23 @@ const Login = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await authenticateUser(email, password);
+      const response = await authenticate(email, password);
       if (response) {
-        console.log("from js", response.token);
-        localStorage.setItem("token", response.jwtToken);
+        localStorage.setItem("token", response.token);
         console.log(localStorage.getItem("token"));
+        console.log(jwt(response.token));
 
-        navigate("/admin/");
+        const decoded = jwt(response.token);
+        const role = decoded.Role[0].authority;
+        console.log("Role", decoded.Role[0].authority);
 
-        window.location.reload();
+        if (role == "ADMIN") {
+          navigate("/admin/");
+          window.location.reload();
+        } else if (role == "USER") {
+          navigate("/user/");
+          window.location.reload();
+        }
       }
     } catch (error) {
       console.log("error");
