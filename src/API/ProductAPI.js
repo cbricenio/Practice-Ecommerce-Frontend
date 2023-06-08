@@ -6,6 +6,7 @@ export const saveProduct = async (data) => {
   try {
     const response = await axios.post("/admin/saveProduct", data, {
       headers: {
+        // "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
@@ -17,7 +18,7 @@ export const saveProduct = async (data) => {
   }
 };
 
-export const getAllProduct = async () => {
+export const getAllProducts = async () => {
   try {
     const response = await axios.get("/admin/getAllProducts", {
       headers: {

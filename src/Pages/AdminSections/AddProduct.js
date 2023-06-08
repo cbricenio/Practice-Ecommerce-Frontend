@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const navigate = useNavigate();
-  // upload image
-  const [images, setImages] = React.useState([]);
-  const maxNumber = 69;
-  const onChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
-    setImages(imageList);
-  };
-  console.log("image", images);
+  // // upload image
+  // const [images, setImages] = React.useState([]);
+  // const maxNumber = 69;
+  // const onChange = (imageList, addUpdateIndex) => {
+  //   // data for submit
+  //   console.log(imageList, addUpdateIndex);
+  //   setImages(imageList);
+  // };
+  // console.log("image", images);
 
   const handleFileChange = (event) => {
     // const file = event.target.files?.[0] || null;
@@ -32,8 +32,19 @@ const AddProduct = () => {
     description: "",
     category: "",
     price: "",
+    // image: null,
     quantity: 1,
   });
+  // const { productName, price, description, image, category } = product;
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    setProduct({ ...product, [e.target.name]: value });
+  };
+  const onFileChange = async (e) => {
+    setProduct({ ...product, image: e.target.files[0] });
+  };
 
   const handleDecrement = () => {
     if (quantity > 1) {
@@ -46,14 +57,35 @@ const AddProduct = () => {
     setProduct({ ...product, ["quantity"]: quantity + 1 });
   };
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    console.log(value);
-    setProduct({ ...product, [e.target.name]: value });
-  };
   const ProductRegister = (e) => {
     e.preventDefault();
     console.log("save", product);
+
+    // const formData = new FormData();
+    // formData.append("file", image);
+    // formData.append("product", JSON.stringify({ productName }));
+
+    const formData = new FormData();
+    formData.append("file", product.image);
+    // formData.append(
+    //   "product",
+    //   JSON.stringify({
+    //     productName,
+    //     description,
+    //     category,
+    //     price,
+    //     quantity,
+    //     image,
+    //   })
+    // );
+    formData.append("image", product.image?.name || "");
+    formData.append("productName", product.productName);
+    formData.append("description", product.description);
+    formData.append("category", product.category);
+    formData.append("price", String(product.price));
+    formData.append("quantity", String(product.quantity));
+
+    console.log("formdata", formData);
     saveProduct(product)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -133,7 +165,17 @@ const AddProduct = () => {
                       value={product.price}
                     />
                   </div>
-
+                  <div className="w-full md:w-1/2 p-0">
+                    <label for="grid-zip">Upload Image</label>
+                    <input
+                      type="file"
+                      id="productImage"
+                      name="productImage"
+                      onChange={onFileChange}
+                      accept="image/*"
+                      placeholder=".mp4"
+                    />
+                  </div>
                   <div className="mb-3">
                     <label> Add Quantity</label>
                     <div
@@ -220,17 +262,6 @@ const AddProduct = () => {
             </div>
           )}
         </ImageUploading>
-      </div> */}
-      {/* <div className="w-full md:w-1/2 p-0">
-        <label for="grid-zip">Upload Image</label>
-        <input
-          type="file"
-          id="productImage"
-          name="productImage"
-          onChange={handleFileChange}
-          accept="image/*"
-          placeholder=".mp4"
-        />
       </div> */}
     </>
   );
